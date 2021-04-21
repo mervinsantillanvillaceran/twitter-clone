@@ -22,6 +22,11 @@
             <breeze-input id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
         </div>
 
+        <div class="mt-4">
+            <breeze-label for="avatar" value="Avatar" />
+            <breeze-input id="avatar" type="file" class="mt-1 block w-full rounded-none" @change="onFileChanged($event)" required />
+        </div>
+
         <div class="flex items-center justify-end mt-4">
             <inertia-link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900">
                 Already registered?
@@ -58,6 +63,7 @@
                     email: '',
                     password: '',
                     password_confirmation: '',
+                    avatar: '',
                     terms: false,
                 })
             }
@@ -68,6 +74,10 @@
                 this.form.post(this.route('register'), {
                     onFinish: () => this.form.reset('password', 'password_confirmation'),
                 })
+            },
+
+            onFileChanged(e) {
+                this.form.avatar = e.target.files[0];
             }
         }
     }

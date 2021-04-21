@@ -24,8 +24,12 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <inertia-link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
+            <inertia-link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 mr-4">
                 Forgot your password?
+            </inertia-link>
+
+            <inertia-link :href="route('register')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                Not yet registered?
             </inertia-link>
 
             <breeze-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

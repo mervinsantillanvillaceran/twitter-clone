@@ -37,12 +37,18 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
+            'avatar' => 'image|mimes:jpeg,png,jpg',
         ]);
+
+        // upload file
+        $avatar = time() . '.' . $request->avatar->extension();
+        $request->avatar->storeAs('images', $avatar);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'avatar' => $avatar,
         ]);
 
         event(new Registered($user));
