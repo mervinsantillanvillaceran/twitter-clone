@@ -9,7 +9,7 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <form @submit="submit">
+                    <form @submit.prevent="submit">
                         <div class="px-6 pt-6 bg-white">
                             <label for="message" class="leading-7 text-sm text-gray-600">Message</label>
                             <textarea v-model="form.text" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
@@ -39,8 +39,7 @@
             }
         },
         methods: {
-            async submit(e) {
-                e.preventDefault();
+            submit() {
                 this.form.post(this.route('tweets.store'));
             }
         }

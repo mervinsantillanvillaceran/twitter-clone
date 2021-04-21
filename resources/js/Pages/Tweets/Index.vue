@@ -26,12 +26,12 @@
                             {{ formatDate(tweet.created_at) }}
                         </div>
                     </div>
-                    <div>
+                    <div v-if="this.user.id == tweet.user_id">
                         <div class="px-6 pt-6 bg-white">
                             <inertia-link :href="`/tweets/${tweet.id}/edit`" class="text-white bg-yellow-500 border-0 py-1 px-2 focus:outline-none hover:bg-yellow-600 rounded text-sm">
                                 edit
                             </inertia-link>
-                            <button class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
+                            <button @click="deleteTweet(tweet.id)" class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
                                 delete
                             </button>
                         </div>
@@ -50,7 +50,10 @@
 </template>
 
 <script>
+    import { computed } from 'vue'
+    import { usePage } from '@inertiajs/inertia-vue3'
     import BreezeAuthenticatedLayout from '@/Layouts/Authenticated'
+    import Swal from 'sweetalert2'
 
     export default {
         components: {
@@ -59,6 +62,11 @@
         props: {
             tweets: Array
         },
+        data() {
+            return {
+                user: computed(() => usePage().props.value.auth.user)
+            }
+        },
         methods: {
             formatDate(d) {
                 const dd = new Date(d);
@@ -66,6 +74,21 @@
             },
             pad(n) {
                 return String("00" + n).slice(-2);
+            },
+            deleteTweet(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Are you sure you want to delete this tweet?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$inertia.delete(this.route('tweets.destroy', id));
+                    }
+                })
             }
         }
     }
