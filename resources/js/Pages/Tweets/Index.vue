@@ -1,9 +1,18 @@
 <template>
     <breeze-authenticated-layout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Dashboard
-            </h2>
+            <div  class="flex flex-row">
+                <div  class="flex-auto">
+                    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                        Timeline
+                    </h2>
+                </div>
+                <div class="">
+                    <inertia-link href="/tweets/create" class="text-white bg-blue-500 border-0 py-1 px-4 focus:outline-none hover:bg-blue-600 rounded">
+                        New Tweet
+                    </inertia-link>
+                </div>
+            </div>
         </template>
 
         <div class="py-12">
