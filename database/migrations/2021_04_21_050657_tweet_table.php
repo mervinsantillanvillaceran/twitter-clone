@@ -15,6 +15,7 @@ class TweetTable extends Migration
     {
         Schema::create('tweets', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->string('text');
             $table->timestamps();
             $table->softDeletes();

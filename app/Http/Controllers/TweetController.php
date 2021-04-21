@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tweet;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,7 +15,10 @@ class TweetController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Tweets/Index');
+        $tweets = auth()->user()->tweets->sortByDesc('created_at')->values();
+        return Inertia::render('Tweets/Index', [
+            'tweets' => $tweets
+        ]);
     }
 
     /**
@@ -35,18 +39,16 @@ class TweetController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'text' => 'required|string',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        Tweet::create([
+            'user_id' => auth()->user()->id,
+            'text' => $request->text,
+        ]);
+
+        return redirect('tweets');
     }
 
     /**
@@ -55,9 +57,11 @@ class TweetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Tweet $tweet)
     {
-        //
+        return Inertia::render('Tweets/Edit', [
+            'tweet' => $tweet
+        ]);
     }
 
     /**
@@ -67,9 +71,17 @@ class TweetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Tweet $tweet)
     {
-        //
+        $request->validate([
+            'text' => 'required|string',
+        ]);
+
+        $tweet->update([
+            'text' => $request->text,
+        ]);
+
+        return redirect('tweets');
     }
 
     /**
