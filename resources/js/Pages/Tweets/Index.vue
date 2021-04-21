@@ -26,12 +26,15 @@
                             {{ formatDate(tweet.created_at) }}
                         </div>
                     </div>
-                    <div v-if="this.user.id == tweet.user_id">
+                    <div>
                         <div class="px-6 pt-6 bg-white">
-                            <inertia-link :href="`/tweets/${tweet.id}/edit`" class="text-white bg-yellow-500 border-0 py-1 px-2 focus:outline-none hover:bg-yellow-600 rounded text-sm">
+                            <inertia-link :href="`/tweets/${tweet.id}/edit`" class="text-white bg-gray-500 border-0 py-1 px-2 focus:outline-none hover:bg-gray-600 rounded text-sm">
+                                show
+                            </inertia-link>
+                            <inertia-link v-if="this.user.id == tweet.user_id" :href="`/tweets/${tweet.id}/edit`" class="ml-1 text-white bg-yellow-500 border-0 py-1 px-2 focus:outline-none hover:bg-yellow-600 rounded text-sm">
                                 edit
                             </inertia-link>
-                            <button @click="deleteTweet(tweet.id)" class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
+                            <button v-if="this.user.id == tweet.user_id" @click="deleteTweet(tweet.id)" class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
                                 delete
                             </button>
                         </div>

@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\TweetController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FollowerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +28,11 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
+    // Follow and unfollow users
+    Route::post('/follow/{id}', [FollowerController::class, 'store'])->name('followers.store');
+    Route::post('/unfollow/{id}', [FollowerController::class, 'destroy'])->name('followers.destroy');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::resource('tweets', TweetController::class);
 });
 

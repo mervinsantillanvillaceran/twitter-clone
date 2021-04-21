@@ -18,6 +18,9 @@
                                 <breeze-nav-link :href="route('tweets.index')" :active="route().current('tweets.index')">
                                     Timeline
                                 </breeze-nav-link>
+                                <breeze-nav-link :href="route('users.index')" :active="route().current('users.index')">
+                                    Users
+                                </breeze-nav-link>
                             </div>
                         </div>
 
@@ -64,6 +67,9 @@
                     <div class="pt-2 pb-3 space-y-1">
                         <breeze-responsive-nav-link :href="route('tweets.index')" :active="route().current('tweets.index')">
                             Timeline
+                        </breeze-responsive-nav-link>
+                        <breeze-responsive-nav-link :href="route('users.index')" :active="route().current('users.index')">
+                            Users
                         </breeze-responsive-nav-link>
                     </div>
 
