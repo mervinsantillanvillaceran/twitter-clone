@@ -49,7 +49,8 @@
                             <textarea v-model="comment.message" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 h-20 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
                         </div>
                         <div class="px-6 pb-6 pt-2 float-right">
-                            <button type="submit" :disabled="disableCommentBtn" class="text-white text-sm bg-blue-500 border-0 py-1 px-2 focus:outline-none hover:bg-blue-600 rounded" :class="{ 'opacity-50': disableCommentBtn, ' cursor-not-allowed': disableCommentBtn }">Add Comment</button>
+                            <button v-show="editing" @click.prevent="cancelEdit()" class="mr-2 text-white text-sm bg-gray-500 border-0 py-1 px-2 focus:outline-none hover:bg-gray-600 rounded">Cancel</button>
+                            <button type="submit" :disabled="disableCommentBtn" class="text-white text-sm bg-blue-500 border-0 py-1 px-2 focus:outline-none hover:bg-blue-600 rounded" :class="{ 'opacity-50': disableCommentBtn, ' cursor-not-allowed': disableCommentBtn }">{{ editing ? 'Update' : 'Add'}} Comment</button>
                         </div>
                     </form>
                 </div>
@@ -69,9 +70,9 @@
                     </div>
                     <div>
                         <div class="px-6 pt-6 bg-white">
-                            <inertia-link v-if="this.user.id == comment.user_id" :href="`/tweets/${comment.id}/edit`" class="ml-1 text-white bg-yellow-500 border-0 py-1 px-2 focus:outline-none hover:bg-yellow-600 rounded text-sm">
+                            <button v-if="this.user.id == comment.user_id" @click="editComment(comment.id)" class="ml-1 text-white bg-yellow-500 border-0 py-1 px-2 focus:outline-none hover:bg-yellow-600 rounded text-sm">
                                 edit
-                            </inertia-link>
+                            </button>
                             <button v-if="this.user.id == comment.user_id" @click="deleteComment(comment.id)" class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
                                 delete
                             </button>
@@ -109,6 +110,8 @@
                 comment : this.$inertia.form({
                     message: ''
                 }),
+                editing: false,
+                selectedId: 0
             }
         },
         methods: {
@@ -120,9 +123,15 @@
                 return String("00" + n).slice(-2);
             },
             submitComment() {
-                this.comment.post(this.route('comments.store', this.tweet.id), {
-                    onFinish: () => this.comment.reset('message'),
-                });
+                if (this.editing) {
+                    this.comment.put(this.route('comments.update', this.selectedId), {
+                        onFinish: () => this.cancelEdit(),
+                    });
+                } else {
+                    this.comment.post(this.route('comments.store', this.tweet.id), {
+                        onFinish: () => this.comment.reset('message'),
+                    });
+                }
             },
             deleteTweet(id) {
                 Swal.fire({
@@ -153,6 +162,20 @@
                         this.$inertia.delete(this.route('comments.destroy', id));
                     }
                 })
+            },
+            editComment(comment_id) {
+                const comment = this.tweet.comments.find(c => c.id == comment_id);
+
+                if (comment) {
+                    this.selectedId = comment.id;
+                    this.comment.message = comment.message;
+                    this.editing = true;
+                }
+            },
+            cancelEdit() {
+                this.comment.reset();
+                this.selectedId = 0;
+                this.editing = false;
             }
         },
         computed: {

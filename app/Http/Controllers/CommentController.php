@@ -82,7 +82,16 @@ class CommentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+
+        $request->validate([
+            'message' => 'required|string|max:255',
+        ]);
+
+        $comment->message = $request->message;
+        $comment->update();
+
+        return redirect()->back();
     }
 
     /**

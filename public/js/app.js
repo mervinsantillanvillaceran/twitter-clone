@@ -17406,7 +17406,9 @@ __webpack_require__.r(__webpack_exports__);
       }),
       comment: this.$inertia.form({
         message: ''
-      })
+      }),
+      editing: false,
+      selectedId: 0
     };
   },
   methods: {
@@ -17420,11 +17422,19 @@ __webpack_require__.r(__webpack_exports__);
     submitComment: function submitComment() {
       var _this = this;
 
-      this.comment.post(this.route('comments.store', this.tweet.id), {
-        onFinish: function onFinish() {
-          return _this.comment.reset('message');
-        }
-      });
+      if (this.editing) {
+        this.comment.put(this.route('comments.update', this.selectedId), {
+          onFinish: function onFinish() {
+            return _this.cancelEdit();
+          }
+        });
+      } else {
+        this.comment.post(this.route('comments.store', this.tweet.id), {
+          onFinish: function onFinish() {
+            return _this.comment.reset('message');
+          }
+        });
+      }
     },
     deleteTweet: function deleteTweet(id) {
       var _this2 = this;
@@ -17459,6 +17469,22 @@ __webpack_require__.r(__webpack_exports__);
           _this3.$inertia["delete"](_this3.route('comments.destroy', id));
         }
       });
+    },
+    editComment: function editComment(comment_id) {
+      var comment = this.tweet.comments.find(function (c) {
+        return c.id == comment_id;
+      });
+
+      if (comment) {
+        this.selectedId = comment.id;
+        this.comment.message = comment.message;
+        this.editing = true;
+      }
+    },
+    cancelEdit: function cancelEdit() {
+      this.comment.reset();
+      this.selectedId = 0;
+      this.editing = false;
     }
   },
   computed: {
@@ -19255,15 +19281,12 @@ var _hoisted_21 = {
 var _hoisted_22 = {
   "class": "px-6 pt-6 bg-white"
 };
-
-var _hoisted_23 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" edit ");
-
-var _hoisted_24 = {
+var _hoisted_23 = {
   key: 2,
   "class": "max-w-7xl mx-auto sm:px-6 lg:px-8"
 };
 
-var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
   "class": "bg-white overflow-hidden shadow-sm sm:rounded-lg mb-2"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
   "class": "p-6 bg-white border-b border-gray-200"
@@ -19307,7 +19330,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         "class": "ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm"
       }, " delete ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])])]), _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
-        onSubmit: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
+        onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
           return $options.submitComment && $options.submitComment.apply($options, arguments);
         }, ["prevent"]))
       }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("textarea", {
@@ -19318,15 +19341,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         "class": "w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 h-20 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
       }, null, 512
       /* NEED_PATCH */
-      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.comment.message]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.comment.message]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+        onClick: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
+          return $options.cancelEdit();
+        }, ["prevent"])),
+        "class": "mr-2 text-white text-sm bg-gray-500 border-0 py-1 px-2 focus:outline-none hover:bg-gray-600 rounded"
+      }, "Cancel", 512
+      /* NEED_PATCH */
+      ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.editing]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
         type: "submit",
         disabled: $options.disableCommentBtn,
         "class": ["text-white text-sm bg-blue-500 border-0 py-1 px-2 focus:outline-none hover:bg-blue-600 rounded", {
           'opacity-50': $options.disableCommentBtn,
           ' cursor-not-allowed': $options.disableCommentBtn
         }]
-      }, "Add Comment", 10
-      /* CLASS, PROPS */
+      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.editing ? 'Update' : 'Add') + " Comment", 11
+      /* TEXT, CLASS, PROPS */
       , ["disabled"])])], 32
       /* HYDRATE_EVENTS */
       )])]), $options.hasErrors ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_16, [_hoisted_17])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $props.tweet.comments.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_18, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.tweet.comments, function (comment) {
@@ -19337,20 +19367,15 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         /* TEXT */
         ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_21, " 👱🏼 Commented by " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(comment.user.name) + " ⏱ " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.formatDate(comment.created_at)), 1
         /* TEXT */
-        )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_22, [_this.user.id == comment.user_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_inertia_link, {
+        )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_22, [_this.user.id == comment.user_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", {
           key: 0,
-          href: "/tweets/".concat(comment.id, "/edit"),
+          onClick: function onClick($event) {
+            return $options.editComment(comment.id);
+          },
           "class": "ml-1 text-white bg-yellow-500 border-0 py-1 px-2 focus:outline-none hover:bg-yellow-600 rounded text-sm"
-        }, {
-          "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-            return [_hoisted_23];
-          }),
-          _: 2
-          /* DYNAMIC */
-
-        }, 1032
-        /* PROPS, DYNAMIC_SLOTS */
-        , ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _this.user.id == comment.user_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", {
+        }, " edit ", 8
+        /* PROPS */
+        , ["onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _this.user.id == comment.user_id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", {
           key: 1,
           onClick: function onClick($event) {
             return $options.deleteComment(comment.id);
@@ -19361,7 +19386,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         , ["onClick"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_24, [_hoisted_25]))])];
+      ))])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_23, [_hoisted_24]))])];
     }),
     _: 1
     /* STABLE */
