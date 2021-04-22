@@ -7,6 +7,14 @@
                         Users
                     </h2>
                 </div>
+                <div class="flex flex-row">
+                    <div class="mr-2">
+                        <input type="text" v-model="search" class="h-8 border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 rounded-md shadow-sm" placeholder="Search Users">
+                        <button @click="searchUsers()" class="ml-2 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded">
+                            Search
+                        </button>
+                    </div>
+                </div>
             </div>
         </template>
 
@@ -52,7 +60,13 @@
             BreezeAuthenticatedLayout,
         },
         props: {
-            users: Array
+            users: Array,
+            searchInput: String,
+        },
+        data() {
+            return {
+                search: (this.searchInput) ? this.searchInput : '',
+            }
         },
         methods: {
             follow(user_id) {
@@ -61,6 +75,10 @@
 
             unfollow(user_id) {
                 this.$inertia.post(this.route('followers.destroy', user_id));
+            },
+
+            searchUsers() {
+                this.$inertia.get(this.route('users.index', { search: this.search }));
             }
         }
     }

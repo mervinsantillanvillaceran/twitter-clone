@@ -16,13 +16,20 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->search ?? '';
+
         $users = User::withCount(['followers as isFollowed' => function($query) {
             $query->where('follower_id', auth()->user()->id);
-        }])->where('id', '!=', auth()->user()->id)->get();
+        }])->where('id', '!=', auth()->user()->id)
+           ->where(function($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%")
+                      ->orWhere('email', 'LIKE', "%{$search}%");
+           })->get();
 
         return Inertia::render('Users/Index', [
+            'searchInput' => $search,
             'users' => $users
         ]);
     }
