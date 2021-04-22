@@ -4,7 +4,7 @@
             <div  class="flex flex-row">
                 <div  class="flex-auto">
                     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                        Following
+                        Followers
                     </h2>
                 </div>
             </div>
@@ -21,19 +21,6 @@
                             {{ user.email }}
                         </div>
                     </div>
-                    <!-- <div>
-                        <div class="px-6 pt-6 bg-white">
-                            <inertia-link :href="`/messages/${user.id}`" class="text-white bg-indigo-500 border-0 py-1 px-2 focus:outline-none hover:bg-indigo-600 rounded text-sm">
-                                Message
-                            </inertia-link>
-                            <button v-if="!user.isFollowed" @click="follow(user.id)" class="ml-1 text-white bg-gray-500 border-0 py-1 px-2 focus:outline-none hover:bg-gray-600 rounded text-sm">
-                                Follow
-                            </button>
-                            <button v-if="user.isFollowed" @click="unfollow(user.id)"  class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
-                                Unfollow
-                            </button>
-                        </div>
-                    </div> -->
                 </div>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" v-else>
