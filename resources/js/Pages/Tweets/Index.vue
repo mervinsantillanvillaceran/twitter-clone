@@ -7,7 +7,13 @@
                         Timeline
                     </h2>
                 </div>
-                <div class="">
+                <div class="flex flex-row">
+                    <div class="mr-2">
+                        <input type="text" v-model="search" class="h-8 border-gray-300 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 rounded-md shadow-sm" placeholder="Search Tweets">
+                        <button @click="searchTweets()" class="ml-2 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded">
+                            Search
+                        </button>
+                    </div>
                     <inertia-link href="/tweets/create" class="text-white bg-blue-500 border-0 py-1 px-4 focus:outline-none hover:bg-blue-600 rounded">
                         New Tweet
                     </inertia-link>
@@ -63,14 +69,19 @@
             BreezeAuthenticatedLayout,
         },
         props: {
+            searchInput: String,
             tweets: Array
         },
         data() {
             return {
-                user: computed(() => usePage().props.value.auth.user)
+                user: computed(() => usePage().props.value.auth.user),
+                search: (this.searchInput) ? this.searchInput : '',
             }
         },
         methods: {
+            searchTweets() {
+                this.$inertia.get(this.route('tweets.index'), { search : this.search });
+            },
             formatDate(d) {
                 const dd = new Date(d);
                 return `${dd.getFullYear()}-${this.pad(dd.getMonth())}-${this.pad(dd.getDate())}`;

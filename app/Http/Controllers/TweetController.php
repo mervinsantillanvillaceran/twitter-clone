@@ -13,16 +13,18 @@ class TweetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->search ?? '';
         $following = auth()->user()->following->pluck('id');
 
         $tweets = Tweet::with('user')->where(function ($query) use ($following) {
             $query->where('user_id', auth()->user()->id)
                   ->orWhereIn('user_id', $following);
-        })->latest()->get();
+        })->where('text', 'LIKE', "%{$search}%")->latest()->get();
 
         return Inertia::render('Tweets/Index', [
+            'searchInput' => $search,
             'tweets' => $tweets
         ]);
     }
