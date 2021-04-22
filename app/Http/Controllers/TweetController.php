@@ -18,10 +18,10 @@ class TweetController extends Controller
         $search = $request->search ?? '';
         $following = auth()->user()->following->pluck('id');
 
-        $tweets = Tweet::with('user')->where(function ($query) use ($following) {
-            $query->where('user_id', auth()->user()->id)
-                  ->orWhereIn('user_id', $following);
-        })->where('text', 'LIKE', "%{$search}%")->latest()->get();
+        $tweets = Tweet::with('user')
+                        ->where('text', 'LIKE', "%{$search}%")
+                        ->latest()
+                        ->get();
 
         return Inertia::render('Tweets/Index', [
             'searchInput' => $search,
@@ -39,7 +39,9 @@ class TweetController extends Controller
     {
         $tweet = Tweet::with(['user', 'comments' => function($query) {
             $query->with('user')->orderByDesc('created_at');
-        }])->findOrFail($id);
+        }])->find($id);
+
+        if (!$tweet) return redirect("/tweets");
 
         return Inertia::render('Tweets/Show', [
             'tweet' => $tweet
@@ -118,6 +120,6 @@ class TweetController extends Controller
     public function destroy(Tweet $tweet)
     {
         $tweet->delete();
-        return redirect('tweets');
+        return redirect(request()->headers->get('referer'));
     }
 }

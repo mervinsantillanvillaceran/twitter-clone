@@ -32,6 +32,9 @@ Route::get('/', function () {
 Route::group(['middleware' => ['auth']], function () {
     // users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{id}/following', [UserController::class, 'following'])->name('users.following');
+    Route::get('/users/{id}/followers', [UserController::class, 'followers'])->name('users.followers');
+    Route::get('/users/{id}/tweets', [UserController::class, 'tweets'])->name('users.tweets');
 
     // Follow and unfollow users
     Route::post('/follow/{id}', [FollowerController::class, 'store'])->name('followers.store');

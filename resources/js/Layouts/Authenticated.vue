@@ -42,6 +42,15 @@
                                     </template>
 
                                     <template #content>
+                                        <breeze-dropdown-link :href="route('users.tweets', $page.props.auth.user.id)" method="get" as="button">
+                                            My Tweets
+                                        </breeze-dropdown-link>
+                                        <breeze-dropdown-link :href="route('users.following', $page.props.auth.user.id)" method="get" as="button">
+                                            Following
+                                        </breeze-dropdown-link>
+                                        <breeze-dropdown-link :href="route('users.followers', $page.props.auth.user.id)" method="get" as="button">
+                                            Followers
+                                        </breeze-dropdown-link>
                                         <breeze-dropdown-link :href="route('logout')" method="post" as="button">
                                             Log Out
                                         </breeze-dropdown-link>
@@ -81,6 +90,15 @@
                         </div>
 
                         <div class="mt-3 space-y-1">
+                            <breeze-responsive-nav-link :href="route('users.tweets', $page.props.auth.user.id)" method="get" as="button">
+                                My Tweets
+                            </breeze-responsive-nav-link>
+                            <breeze-responsive-nav-link :href="route('users.following', $page.props.auth.user.id)" method="get" as="button">
+                                Following
+                            </breeze-responsive-nav-link>
+                            <breeze-responsive-nav-link :href="route('users.followers', $page.props.auth.user.id)" method="get" as="button">
+                                Followers
+                            </breeze-responsive-nav-link>
                             <breeze-responsive-nav-link :href="route('logout')" method="post" as="button">
                                 Log Out
                             </breeze-responsive-nav-link>
