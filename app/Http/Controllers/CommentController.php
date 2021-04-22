@@ -39,7 +39,7 @@ class CommentController extends Controller
         $tweet = Tweet::findOrFail($id);
 
         $request->validate([
-            'message' => 'required|string',
+            'message' => 'required|string|max:255',
         ]);
 
         Comment::create([
@@ -93,6 +93,8 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+        return redirect()->back();
     }
 }

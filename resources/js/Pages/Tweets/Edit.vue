@@ -18,7 +18,7 @@
                             <textarea v-model="form.text" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
                         </div>
                         <div class="px-6 pb-6 pt-2 float-right">
-                            <button type="submit" class="text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded">Save</button>
+                            <button type="submit" class="text-white bg-blue-500 border-0 py-2 px-4 focus:outline-none hover:bg-blue-600 rounded" :class="{ 'opacity-50': disableBtn, ' cursor-not-allowed': disableBtn }">Save</button>
                         </div>
                     </form>
                 </div>
@@ -46,17 +46,14 @@
         },
         methods: {
             submit() {
+                if (this.disableBtn) return;
                 this.form.put(this.route('tweets.update', this.tweet.id));
             }
         },
         computed: {
-            errors() {
-                return this.$page.props.errors;
-            },
-
-            hasErrors() {
-                return Object.keys(this.errors).length > 0;
-            },
+            disableBtn() {
+                return this.form.text == ''
+            }
         }
     }
 </script>

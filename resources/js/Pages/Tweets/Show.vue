@@ -49,10 +49,13 @@
                             <textarea v-model="comment.message" name="message" class="w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 h-20 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"></textarea>
                         </div>
                         <div class="px-6 pb-6 pt-2 float-right">
-                            <button type="submit" class="text-white text-sm bg-blue-500 border-0 py-1 px-2 focus:outline-none hover:bg-blue-600 rounded">Add Comment</button>
+                            <button type="submit" :disabled="disableCommentBtn" class="text-white text-sm bg-blue-500 border-0 py-1 px-2 focus:outline-none hover:bg-blue-600 rounded" :class="{ 'opacity-50': disableCommentBtn, ' cursor-not-allowed': disableCommentBtn }">Add Comment</button>
                         </div>
                     </form>
                 </div>
+            </div>
+            <div v-if="hasErrors" class="max-w-7xl mx-auto sm:px-6 lg:px-8 my-2">
+                <div class="font-medium text-red-600">Whoops! Something went wrong. Max character is only 255.</div>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" v-if="tweet.comments.length">
                 <div v-for="comment in tweet.comments" :key="comment.id" class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-2 flex">
@@ -64,22 +67,22 @@
                             👱🏼 Commented by {{ comment.user.name }} ⏱ {{ formatDate(comment.created_at) }}
                         </div>
                     </div>
-                    <!-- <div>
+                    <div>
                         <div class="px-6 pt-6 bg-white">
-                            <inertia-link v-if="this.user.id == comment.user_id" :href="`/tweets/${tweet.id}/edit`" class="ml-1 text-white bg-yellow-500 border-0 py-1 px-2 focus:outline-none hover:bg-yellow-600 rounded text-sm">
+                            <inertia-link v-if="this.user.id == comment.user_id" :href="`/tweets/${comment.id}/edit`" class="ml-1 text-white bg-yellow-500 border-0 py-1 px-2 focus:outline-none hover:bg-yellow-600 rounded text-sm">
                                 edit
                             </inertia-link>
-                            <button v-if="this.user.id == comment.user_id" @click="deleteTweet(tweet.id)" class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
+                            <button v-if="this.user.id == comment.user_id" @click="deleteComment(comment.id)" class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
                                 delete
                             </button>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" v-else>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-2">
                     <div class="p-6 bg-white border-b border-gray-200">
-                        No tweets found.
+                        No comments found.
                     </div>
                 </div>
             </div>
@@ -135,7 +138,33 @@
                         this.$inertia.delete(this.route('tweets.destroy', id));
                     }
                 })
+            },
+            deleteComment(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Are you sure you want to delete this comment?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$inertia.delete(this.route('comments.destroy', id));
+                    }
+                })
             }
+        },
+        computed: {
+            disableCommentBtn() {
+                return this.comment.message == '';
+            },
+            errors() {
+                return this.$page.props.errors
+            },
+            hasErrors() {
+                return Object.keys(this.errors).length > 0;
+            },
         }
     }
 </script>
