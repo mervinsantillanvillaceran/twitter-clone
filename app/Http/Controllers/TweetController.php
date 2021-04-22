@@ -16,7 +16,6 @@ class TweetController extends Controller
     public function index(Request $request)
     {
         $search = $request->search ?? '';
-        $following = auth()->user()->following->pluck('id');
 
         $tweets = Tweet::with('user')
                         ->where('text', 'LIKE', "%{$search}%")
