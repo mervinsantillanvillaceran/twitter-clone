@@ -21,7 +21,9 @@
 ### Demo
 
 Here is a demo version: [https://msv-twitter.herokuapp.com/](https://msv-twitter.herokuapp.com/)
-Note: Storage files will not work on heroku so User avatars will not be displayed.
+
+
+Note: Storage files will not work on heroku so user avatars will not be displayed. Register now.
 
 ### Functionalities
 
