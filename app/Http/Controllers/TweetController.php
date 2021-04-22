@@ -15,9 +15,26 @@ class TweetController extends Controller
      */
     public function index()
     {
-        $tweets = auth()->user()->tweets->sortByDesc('created_at')->values();
+        $tweets = auth()->user()->tweets()->with('user')->latest()->get();
         return Inertia::render('Tweets/Index', [
             'tweets' => $tweets
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $tweet = Tweet::with(['user', 'comments' => function($query) {
+            $query->with('user')->orderByDesc('created_at');
+        }])->findOrFail($id);
+
+        return Inertia::render('Tweets/Show', [
+            'tweet' => $tweet
         ]);
     }
 

@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,6 +35,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::resource('tweets', TweetController::class);
+
+    Route::post('/comments/{id}', [CommentController::class, 'store'])->name('comments.store');
 });
 
 require __DIR__.'/auth.php';
