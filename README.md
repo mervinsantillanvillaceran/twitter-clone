@@ -18,6 +18,11 @@
 * Run php server `php artisan serve`
 * To build for production, just run `npm run prod`
 
+### Demo
+
+Here is a demo version: [https://msv-twitter.herokuapp.com/](https://msv-twitter.herokuapp.com/)
+Note: Storage files will not work on heroku so User avatars will not be displayed.
+
 ### Functionalities
 
 * Register user with name, email, password and avatar.
