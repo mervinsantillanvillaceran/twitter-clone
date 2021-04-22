@@ -65,7 +65,7 @@ class TweetController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'text' => 'required|string',
+            'text' => 'required|string|max:255',
         ]);
 
         $id = Tweet::create([
@@ -99,7 +99,7 @@ class TweetController extends Controller
     public function update(Request $request, Tweet $tweet)
     {
         $request->validate([
-            'text' => 'required|string',
+            'text' => 'required|string|max:255',
         ]);
 
         $tweet->update([

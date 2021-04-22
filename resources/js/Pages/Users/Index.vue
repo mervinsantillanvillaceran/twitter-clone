@@ -31,7 +31,10 @@
                     </div>
                     <div>
                         <div class="px-6 pt-6 bg-white">
-                            <button v-if="!user.isFollowed" @click="follow(user.id)" class="text-white bg-gray-500 border-0 py-1 px-2 focus:outline-none hover:bg-gray-600 rounded text-sm">
+                            <inertia-link :href="`/messages/${user.id}`" class="text-white bg-indigo-500 border-0 py-1 px-2 focus:outline-none hover:bg-indigo-600 rounded text-sm">
+                                Message
+                            </inertia-link>
+                            <button v-if="!user.isFollowed" @click="follow(user.id)" class="ml-1 text-white bg-gray-500 border-0 py-1 px-2 focus:outline-none hover:bg-gray-600 rounded text-sm">
                                 Follow
                             </button>
                             <button v-if="user.isFollowed" @click="unfollow(user.id)"  class="ml-1 text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-sm">
