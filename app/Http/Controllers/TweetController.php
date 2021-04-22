@@ -15,7 +15,13 @@ class TweetController extends Controller
      */
     public function index()
     {
-        $tweets = auth()->user()->tweets()->with('user')->latest()->get();
+        $following = auth()->user()->following->pluck('id');
+
+        $tweets = Tweet::with('user')->where(function ($query) use ($following) {
+            $query->where('user_id', auth()->user()->id)
+                  ->orWhereIn('user_id', $following);
+        })->latest()->get();
+
         return Inertia::render('Tweets/Index', [
             'tweets' => $tweets
         ]);
@@ -60,12 +66,12 @@ class TweetController extends Controller
             'text' => 'required|string',
         ]);
 
-        Tweet::create([
+        $id = Tweet::create([
             'user_id' => auth()->user()->id,
             'text' => $request->text,
-        ]);
+        ])->id;
 
-        return redirect('tweets');
+        return redirect("/tweets/{$id}");
     }
 
     /**
@@ -98,7 +104,7 @@ class TweetController extends Controller
             'text' => $request->text,
         ]);
 
-        return redirect('tweets');
+        return redirect("/tweets/{$tweet->id}");
     }
 
     /**
