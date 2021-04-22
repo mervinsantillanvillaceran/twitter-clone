@@ -11,7 +11,7 @@
 * Build project `npm run dev`
 * Copy `.env-example` to `.env` for environment configuration
 * Change `config/database.php` file - default value to `mysql` or any database you are using (I used pgsql just for heroku)
-* Create database and update `DB_` configs in `.env`
+* Create database (name: `twitter_clone`) or update `DB_DATABASE` in `.env` for your own database name
 * Create and Migrate database `php artisan migrate`
 * Run `php artisan key:generate`
 * Run `php artisan storage:link`
